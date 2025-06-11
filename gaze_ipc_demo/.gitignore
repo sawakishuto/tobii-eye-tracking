@@ -1,0 +1,122 @@
+# Build directories
+build/
+build-*/
+out/
+cmake-build-*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Executables
+*.exe
+*.out
+*.app
+bin/
+producer
+consumer
+
+# Object files
+*.o
+*.obj
+*.lo
+*.slo
+*.ko
+*.elf
+
+# Shared libraries
+*.so
+*.so.*
+*.dylib
+*.dll
+
+# Static libraries
+*.a
+*.la
+*.lib
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# IDE files
+.vscode/
+.idea/
+.vs/
+*.swp
+*.swo
+*~
+.project
+.cproject
+.settings/
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.backup
+core
+
+# IPC runtime files (project specific)
+/dev/shm/gaze_shm
+/tmp/gaze_wakeup.sock
+
+# Tobii SDK (if downloaded locally)
+tobii_sdk/
+external/
+
+# Test files
+test_output/
+*.test
+
+# Coverage files
+*.gcno
+*.gcda
+*.gcov
+coverage/
+
+# Profiling
+*.prof
+gmon.out
+
+# Package managers
+conan/
+vcpkg/
+
+# Documentation build
+docs/build/
+doc/html/
+doc/latex/
+
+# User specific
+*.user
+.vscode/settings.json 
