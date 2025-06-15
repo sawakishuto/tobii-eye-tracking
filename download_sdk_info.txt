@@ -1,0 +1,86 @@
+====================================
+Tobii SDK ダウンロード手順
+====================================
+
+このプロジェクトを使用するには、Tobii SDKをダウンロードする必要があります。
+
+■ ダウンロード手順
+
+1. Tobii Developer Zoneにアクセス
+   https://developer.tobii.com/
+
+2. アカウント作成またはログイン
+
+3. 必要なSDKをダウンロード：
+   
+   【方法1】Stream Engine API（低レベルAPI）
+   - Product Integration > Stream Engine にアクセス
+   - ダウンロードリンクからSDKをダウンロード
+   
+   【方法2】Game Integration API（高レベルAPI）※ゲーム開発推奨
+   - PC Gaming > Downloads にアクセス
+   - "Tobii Game Integration API" をダウンロード
+   
+   【方法3】Tobii Pro SDK（研究用）※研究者推奨
+   - https://connect.tobii.com/ でアカウント作成
+   - SDK Downloads セクションから "Tobii Pro SDK" をダウンロード
+   - 低レイテンシ・高精度な生データアクセスが可能
+
+4. ダウンロードしたZIPファイルを展開
+
+5. 以下の構造でプロジェクトに配置：
+
+tobii-eye-tracking/
+└── tobii_sdk/
+    ├── stream_engine/         (Stream Engine APIを使用する場合)
+    │   ├── include/
+    │   │   └── tobii/
+    │   │       ├── tobii.h
+    │   │       └── tobii_streams.h
+    │   └── lib/
+    │       └── tobii/
+    │           ├── x64/
+    │           │   ├── tobii_stream_engine.lib
+    │           │   └── tobii_stream_engine.dll
+    │           └── x86/
+    ├── game_integration/      (Game Integration APIを使用する場合)
+    │   ├── include/
+    │   │   └── tobii_gameintegration.h
+    │   └── lib/
+    │       ├── x64/
+    │       │   ├── tobii_gameintegration.lib
+    │       │   └── tobii_gameintegration.dll
+    │       └── x86/
+    └── pro_sdk/              (Tobii Pro SDKを使用する場合)
+        ├── include/
+        │   ├── tobii_research.h
+        │   ├── tobii_research_streams.h
+        │   └── tobii_research_eyetracker.h
+        └── lib/
+            ├── x64/
+            │   ├── tobii_research.lib
+            │   └── tobii_research.dll
+            └── x86/
+
+■ 注意事項
+
+- ゲーム開発：Game Integration APIが最も簡単
+- 研究用途：Tobii Pro SDKが低レイテンシ・高精度でおすすめ
+- 複数のSDKをダウンロードすれば、全てのサンプルプログラムが実行可能
+- SDKのライセンス条項を必ず確認してください
+- 商用利用の場合は、Tobiiの商用ライセンスが必要
+- Tobii Pro SDKは研究・分析用途のライセンスが含まれています
+
+■ その他必要なソフトウェア
+
+1. Tobii Eye Tracking ドライバー
+   - Tobii Experience (Windows 11推奨)
+   - Tobii Eye Tracking Core Software (Windows 10)
+   
+   ダウンロード: https://gaming.tobii.com/getstarted/
+
+2. Visual Studio 2019以降
+   - C++によるデスクトップ開発ワークロードをインストール
+
+3. CMake 3.10以降
+   - https://cmake.org/download/ 
