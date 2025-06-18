@@ -5,6 +5,11 @@ project(TobiiEyeTracking)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Ensure MSVC treats source files as UTF-8 to allow Unicode string literals in source code
+if (MSVC)
+    add_compile_options(/utf-8)
+endif()
+
 # Windowsプラットフォームのチェック
 if(NOT WIN32)
     message(FATAL_ERROR "このプロジェクトはWindows専用です")
@@ -106,4 +111,15 @@ target_link_libraries(tobii_pro_overlay "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_rese
 
 add_custom_command(TARGET tobii_pro_overlay POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_overlay>)
 
-install(TARGETS tobii_pro_overlay RUNTIME DESTINATION bin) 
+install(TARGETS tobii_pro_overlay RUNTIME DESTINATION bin)
+
+# reading sequence
+add_executable(tobii_pro_sequence WIN32 src/tobii_pro_sequence.cpp)
+
+target_include_directories(tobii_pro_sequence PRIVATE ${TOBII_PRO_SDK_INCLUDE})
+
+target_link_libraries(tobii_pro_sequence "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.lib" gdi32 user32)
+
+add_custom_command(TARGET tobii_pro_sequence POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence>)
+
+install(TARGETS tobii_pro_sequence RUNTIME DESTINATION bin) 
