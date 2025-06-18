@@ -12,7 +12,7 @@ static std::atomic<float> g_gazeY{ -1.f };
 
 // 4 sections of text
 static const std::vector<std::wstring> g_sections = {
-    L"古びた図書館で、ユキは一冊の詩集に手を伸ばした。その瞬間、同じ本に触れた手があった。そこにいたのは、少し年上の青年・リョウ。偶然が二人を引き合わせた。",
+    L"図書館で、ユキは一冊の詩集に手を伸ばした。その瞬間、同じ本に触れた手があった。そこにいた、少し年上の青年・リョウ。偶然が二人を引き合わせた。",
     L"ユキとリョウは、週末ごとに図書館で会い、本について語り合った。やがて、散歩や喫茶店にも行くようになり、彼女の胸には淡い想いが芽生え始めた。",
     L"リョウは海外留学を決意し、ユキに告げた。「また戻ってくるよ」と笑う彼に、ユキは言葉が見つからなかった。ただ「行ってらっしゃい」と微笑んだ。",
     L"1年後の冬、図書館の同じ詩集に、またふたつの手が重なった。そこには、少し大人びたリョウがいた。「ただいま」と言う声に、ユキの瞳が潤んだ。"
@@ -23,6 +23,7 @@ constexpr int kGazeMarginPx = 40; // tolerance around last character
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;
+static bool g_showGaze = true; // toggle visualization
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -58,27 +59,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         RECT lastRect{ x + sz.cx - szLast.cx, y, x + sz.cx, y + sz.cy };
         FrameRect(hdc, &lastRect, (HBRUSH)GetStockObject(GRAY_BRUSH)); // visualize target
 
-        // Draw gaze point if valid
-        float gx = g_gazeX.load();
-        float gy = g_gazeY.load();
-        if (gx >= 0 && gy >= 0)
+        // Draw gaze point if visualization enabled
+        if (g_showGaze)
         {
-            int px = (int)(gx * (rc.right - rc.left));
-            int py = (int)(gy * (rc.bottom - rc.top));
+            float gx = g_gazeX.load();
+            float gy = g_gazeY.load();
+            if (gx >= 0 && gy >= 0)
+            {
+                int px = (int)(gx * (rc.right - rc.left));
+                int py = (int)(gy * (rc.bottom - rc.top));
 
-            // red filled circle
-            HBRUSH hDot = CreateSolidBrush(RGB(255, 0, 0));
-            HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hDot);
-            HPEN oldPen = (HPEN)SelectObject(hdc, GetStockObject(NULL_PEN));
-            int r = 6;
-            Ellipse(hdc, px - r, py - r, px + r, py + r);
-            SelectObject(hdc, oldBrush);
-            SelectObject(hdc, oldPen);
-            DeleteObject(hDot);
+                // red filled circle
+                HBRUSH hDot = CreateSolidBrush(RGB(255, 0, 0));
+                HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hDot);
+                HPEN oldPen = (HPEN)SelectObject(hdc, GetStockObject(NULL_PEN));
+                int r = 6;
+                Ellipse(hdc, px - r, py - r, px + r, py + r);
+                SelectObject(hdc, oldBrush);
+                SelectObject(hdc, oldPen);
+                DeleteObject(hDot);
 
-            // show numeric coordinates top-left
-            std::wstring coord = L"(" + std::to_wstring(px) + L", " + std::to_wstring(py) + L")";
-            TextOutW(hdc, 10, 10, coord.c_str(), (int)coord.size());
+                // show numeric coordinates top-left
+                std::wstring coord = L"(" + std::to_wstring(px) + L", " + std::to_wstring(py) + L")";
+                TextOutW(hdc, 10, 10, coord.c_str(), (int)coord.size());
+            }
         }
 
         SelectObject(hdc, old);
@@ -86,6 +90,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         EndPaint(hWnd, &ps);
         return 0;
     }
+    case WM_KEYDOWN:
+        if (wParam == 'G')
+        {
+            g_showGaze = !g_showGaze;
+            InvalidateRect(hWnd, nullptr, FALSE);
+        }
+        return 0;
     case WM_TIMER:
         InvalidateRect(hWnd, nullptr, FALSE);
         return 0;
