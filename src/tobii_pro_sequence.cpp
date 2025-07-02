@@ -9,21 +9,24 @@
 
 static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
+static std::atomic<bool> g_gazeUpdated{ false };
 
 // 4 sections of text
 static const std::vector<std::wstring> g_sections = {
-    L"図書館で、ユキは一冊の詩集に手を伸ばした。その瞬間、同じ本に触れた手があった。そこにいた、少し年上の青年・リョウ。偶然が二人を引き合わせた。",
-    L"ユキとリョウは、週末ごとに図書館で会い、本について語り合った。やがて、散歩や喫茶店にも行くようになり、彼女の胸には淡い想いが芽生え始めた。",
-    L"リョウは海外留学を決意し、ユキに告げた。「また戻ってくるよ」と笑う彼に、ユキは言葉が見つからなかった。ただ「行ってらっしゃい」と微笑んだ。",
-    L"1年後の冬、図書館の同じ詩集に、またふたつの手が重なった。そこには、少し大人びたリョウがいた。「ただいま」と言う声に、ユキの瞳が潤んだ。"
+    L"図書館で、ユキは一冊の詩集に手を伸ばした。その瞬間、同じ本に触れた手があった。そこにいた、少し年上の青年・リョウ。偶然が二人を引き合わせた",
+    L"ユキとリョウは、週末ごとに図書館で会い、本について語り合った。やがて、散歩や喫茶店にも行くようになり、彼女の胸には淡い想いが芽生え始めた",
+    L"リョウは海外留学を決意し、ユキに告げた。「また戻ってくるよ」と笑う彼に、ユキは言葉が見つからなかった。ただ「行ってらっしゃい」と微笑んだ",
+    L"1年後の冬、図書館の同じ詩集に、またふたつの手が重なった。そこには、少し大人びたリョウがいた。「ただいま」と言う声に、ユキの瞳が潤んだ"
 };
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 40; // tolerance around last character
+constexpr int kDwellTimeMs = 1000; //5 gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;
 static bool g_showGaze = true; // toggle visualization
+static bool g_seenFirst = false; // whether the first char has been gazed at in current section
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -98,7 +101,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         return 0;
     case WM_TIMER:
-        InvalidateRect(hWnd, nullptr, FALSE);
+        // Only invalidate if gaze data was updated
+        if (g_gazeUpdated.exchange(false)) {
+            InvalidateRect(hWnd, nullptr, FALSE);
+        }
         return 0;
     case WM_DESTROY:
         PostQuitMessage(0);
@@ -117,6 +123,7 @@ void gaze_callback(TobiiResearchGazeData* gaze, void*)
     if (x >= 0 && y >= 0) {
         g_gazeX.store(x);
         g_gazeY.store(y);
+        g_gazeUpdated.store(true);
     }
 }
 
@@ -150,6 +157,39 @@ bool isInsideLastChar(HWND hWnd)
 
     InflateRect(&last, kGazeMarginPx, kGazeMarginPx);
     return (px >= last.left && px <= last.right && py >= last.top && py <= last.bottom);
+}
+
+// Returns true if gaze point is within the bounding box around the first character
+bool isInsideFirstChar(HWND hWnd)
+{
+    float gx = g_gazeX.load();
+    float gy = g_gazeY.load();
+    if (gx < 0) return false;
+
+    RECT rc; GetClientRect(hWnd, &rc);
+    int screenW = rc.right - rc.left;
+    int screenH = rc.bottom - rc.top;
+    int px = (int)(gx * screenW);
+    int py = (int)(gy * screenH);
+
+    HDC hdc = GetDC(hWnd);
+    std::wstring text = g_sections[g_currentSection];
+    HFONT hFont = CreateFontW(32, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+        DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+    HFONT old = (HFONT)SelectObject(hdc, hFont);
+    SIZE szText, szFirst;
+    GetTextExtentPoint32W(hdc, text.c_str(), (int)text.size(), &szText);
+    GetTextExtentPoint32W(hdc, text.c_str(), 1, &szFirst);
+    int x = (rc.right - szText.cx) / 2;
+    int y = (rc.bottom - szText.cy) / 2;
+    RECT first{ x, y, x + szFirst.cx, y + szText.cy };
+    SelectObject(hdc, old);
+    DeleteObject(hFont);
+    ReleaseDC(hWnd, hdc);
+
+    InflateRect(&first, kGazeMarginPx, kGazeMarginPx);
+    return (px >= first.left && px <= first.right && py >= first.top && py <= first.bottom);
 }
 
 int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
@@ -186,21 +226,29 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
         TranslateMessage(&msg);
         DispatchMessage(&msg);
 
+        bool firstInside = isInsideFirstChar(hWnd);
+        if (firstInside)
+        {
+            g_seenFirst = true; // gate has been met
+        }
+
         bool inside = isInsideLastChar(hWnd);
         auto now = std::chrono::steady_clock::now();
-        if (inside) {
+        if (g_seenFirst && inside) {
             if (!g_inTarget) {
                 g_inTarget = true;
                 g_gazeStart = now;
             }
             else {
                 auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(now - g_gazeStart);
-                if (dur.count() > 500) {
+                if (dur.count() > kDwellTimeMs) {
                     // advance section
                     if (g_currentSection < (int)g_sections.size() - 1) {
                         g_currentSection++;
+                        InvalidateRect(hWnd, nullptr, FALSE); // force redraw on section change
                     }
                     g_inTarget = false;
+                    g_seenFirst = false; // reset for next section
                 }
             }
         }
