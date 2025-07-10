@@ -11,15 +11,15 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// セット1：エレベーター工事
+// セットA：メールサーバー緊急メンテナンス
 static const std::vector<std::wstring> g_sections = {
-    L"二〇二五年九月十日（火）午前零時から同日二十四時まで、\n本社ビル全十五基のエレベーターを制御盤交換工事のため終日停止いたします。",
-    L"この工事により、人の上下移動は非常階段に限定されるため、総務部は九月九日（月）十八時までに\n階段照明の点灯確認と避難誘導サインの追加設置を完了してください。",
-    L"各部署は九月九日（月）業務終了時までに大型機材や大量資料のフロア間移動を済ませ、\n当日搬出入を伴う会議や来客対応を極力回避するよう予定を調整してください。",
-    L"身体に不自由のある社員や来訪者向けに、一階ロビーに臨時ワークスペース（Wi-Fi・電源完備）を用意しますので、\n必要な方は人事部まで利用申請をお願いします。",
-    L"停電を伴わない工事ですが、エレベーター内監視カメラおよび管制室の監視装置は一時的にオフラインとなるため、\n施設警備課は人員を増強し、監視強化を実施します。",
-    L"工事完了後、ビル管理会社が稼働試験を行い、九月十一日（水）午前六時までに全基の安全確認が取れ次第、\n社内メールで運行再開をお知らせします。",
-    L"以上、エレベーター制御盤交換という単一の原因に起因する措置となりますので、\n安全確保と業務継続のため、皆さまのご理解とご協力をお願いいたします。"
+    L"11 月 3 日（火）21:00〜22:00 に社内メールサーバーの緊急メンテナンスを実施します。\nこの時間はすべてのメール送受信が停止します。",
+    L"社員は20:45 までに重要メールを送信してください。\n未送信のドラフトはメンテ開始時に破棄される可能性があります。",
+    L"メンテ中の連絡は社内チャットを利用してください。\n緊急時は内線電話で連絡を取ってください。",
+    L"IT チームは作業前にメールデータを完全バックアップします。\n作業後にリストアテストを行い整合性を確認します。",
+    L"延長の恐れがある場合、IT は21:40 に進捗をチャットで通知します。\nその際に新しい終了予定時刻をお知らせします。",
+    L"メールサービスは完了後22:10 までに自動再起動します。\n再開を確認し次第、チャットで復旧報告を投稿します。",
+    L"今回のメンテで迷惑メールフィルターが強化されます。\nご理解とご協力をよろしくお願いいたします。"
 };
 
 static int g_currentSection = 0;
@@ -87,7 +87,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                        DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
         SelectObject(hdc, hSmallFont);
-        std::wstring info = L"セット1 - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
+        std::wstring info = L"セットA - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
         SIZE infoSz;
         GetTextExtentPoint32W(hdc, info.c_str(), (int)info.size(), &infoSz);
         TextOutW(hdc, rc.right - infoSz.cx - 10, 10, info.c_str(), (int)info.size());
@@ -307,7 +307,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
     int sw = work.right - work.left;
     int sh = work.bottom - work.top;
 
-    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set 1"), WS_POPUP | WS_VISIBLE,
+    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set A"), WS_POPUP | WS_VISIBLE,
         work.left, work.top, sw, sh, nullptr, nullptr, hInst, nullptr);
     if (!hWnd) return 0;
 
@@ -354,7 +354,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
                 }
                 else {
                     // All sections completed
-                    MessageBox(hWnd, _T("セット1完了！"), _T("完了"), MB_OK);
+                    MessageBox(hWnd, _T("セットA完了！"), _T("完了"), MB_OK);
                     PostQuitMessage(0);
                 }
                 g_inTarget = false;

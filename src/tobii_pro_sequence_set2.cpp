@@ -11,15 +11,15 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// セット2：配管工事
+// セットB：空調フィルター交換
 static const std::vector<std::wstring> g_sections = {
-    L"二〇二五年十月五日（日）午前五時から同日十八時まで、\n研究棟全域において老朽配管更新工事のため計画断水を実施いたします。",
-    L"これにより上水・温水・実験用純水のすべてが停止するため、ラボ責任者は十月四日（土）二十時までに\n水を要する実験を終了し、培養装置や循環冷却水系を安全停止してください。",
-    L"メンテナンス中は消火栓も使用不可となるため、安全衛生委員会は追加の消火器を各フロア非常口脇に設置し、\n設置完了を十月四日（土）二十二時までに報告書で提出してください。",
-    L"給湯室・化粧室の水道も停止するため、総務部は隣接ビル一階の仮設トイレと手洗いステーションの設置を手配し、\n利用案内を掲示してください。",
-    L"動物飼育室の自動給水ラインは別系統で稼働しますが、念のため飼育担当者は工事開始前に手動で給水量を確認し、\n異常があれば直ちに施設管理課へ連絡してください。",
-    L"工事完了後の十月五日（日）十九時以降、施設管理課が残留塩素濃度と水圧を測定し、\n安全が確認されしだい一斉メールで断水解除を通知します。",
-    L"以上、老朽配管更新という単一の要因に起因する措置となりますので、\n研究データ保全と安全確保のため、関係各位のご協力を強くお願い申し上げます。"
+    L"11 月 10 日（火）08:00〜12:00 にオフィス全館の空調フィルター交換を行います。\n作業中は空調が一時停止します。",
+    L"社員は07:55 までに窓を少し開けて換気を確保してください。\n温度が下がる場合は上着を用意してください。",
+    L"交換スタッフが各部屋に入室しますので機密資料を片づけてください。\n入室時にはスタッフが入館証を提示します。",
+    L"作業音が発生するためオンライン会議は午後以降に移動してください。\n移動が難しい場合はヘッドセットの使用を推奨します。",
+    L"予定より作業が延びる場合、総務は10:30 に状況をメールで共有します。\n延長が決定したら終了予定時刻も合わせて知らせます。",
+    L"フィルター交換後、空調は自動的に再起動します。\n再起動完了を館内放送で案内します。",
+    L"新フィルターにより空気清浄効率が向上します。\n快適な職場環境づくりにご協力をお願いします。"
 };
 
 static int g_currentSection = 0;
@@ -87,7 +87,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                        DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
         SelectObject(hdc, hSmallFont);
-        std::wstring info = L"セット2 - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
+        std::wstring info = L"セットB - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
         SIZE infoSz;
         GetTextExtentPoint32W(hdc, info.c_str(), (int)info.size(), &infoSz);
         TextOutW(hdc, rc.right - infoSz.cx - 10, 10, info.c_str(), (int)info.size());
@@ -292,7 +292,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
     int sw = work.right - work.left;
     int sh = work.bottom - work.top;
 
-    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set 2"), WS_POPUP | WS_VISIBLE,
+    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set B"), WS_POPUP | WS_VISIBLE,
         work.left, work.top, sw, sh, nullptr, nullptr, hInst, nullptr);
     if (!hWnd) return 0;
 
@@ -339,7 +339,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
                 }
                 else {
                     // All sections completed
-                    MessageBox(hWnd, _T("セット2完了！"), _T("完了"), MB_OK);
+                    MessageBox(hWnd, _T("セットB完了！"), _T("完了"), MB_OK);
                     PostQuitMessage(0);
                 }
                 g_inTarget = false;

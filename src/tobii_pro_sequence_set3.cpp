@@ -11,15 +11,15 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// セット3：駐車場工事
+// セットC：勤怠システムアップデート
 static const std::vector<std::wstring> g_sections = {
-    L"二〇二五年十一月十四日（金）午前五時から同日十五時まで、\n本社ビル駐車場をアスファルト舗装改修工事のため全面閉鎖いたします。",
-    L"閉鎖中は車両の入退場が禁止されるため、警備課は十一月十三日（木）十八時までに\n交通コーンと案内看板を設置し、迂回ルートを明示します。",
-    L"車で通勤する社員は当日「イーストタワーガレージ」を利用し、\n利用料金（一人一日一五〇〇円を上限）を領収書とともに総務部へ申請してください。",
-    L"当日納品予定の配送トラックは日程を変更するか、\n工事終了後の十六時以降に南門荷さばきエリアを利用してください。",
-    L"工事による振動のため、隣接する自転車置き場も閉鎖し、代替として正面玄関付近に臨時ラックを設置しますので、\n自転車通勤者はそちらをお使いください。",
-    L"騒音と舗装材の臭気を考慮し、人事部は希望部署にテレワークを許可します。\n各マネージャーは十一月十二日（水）正午までにテレワーク予定者一覧を提出してください。",
-    L"舗装後の冷却とライン引きが完了し次第、十一月十五日（土）午前六時に駐車場を再開し、\n施設管理課が社内メールで通知します。"
+    L"11 月 12 日（木）18:00〜20:00 に勤怠打刻システムのアップデートを実施します。\nこの間は出退勤の打刻ができません。",
+    L"社員は17:55 までに退勤予定の方は事前打刻を行ってください。\n事前打刻が難しい場合は人事にメール報告してください。",
+    L"アップデート中の勤怠データは自動バックアップされます。\n復元テストはアップデート直後に行います。",
+    L"作業時間中に出社・退社する場合は紙の臨時記録表に記入してください。\n翌営業日に人事がシステムへ入力します。",
+    L"進捗が遅れる場合、IT は19:15 にチャットで経過報告を送ります。\n延長する場合は新しい完了時刻も案内します。",
+    L"アップデート完了後、システムは20:10 までに再起動します。\n再開確認後にポータル掲示板へ通知を掲載します。",
+    L"新バージョンでは打刻ミス自動検知機能が追加されます。\nご理解とご協力をお願いいたします。"
 };
 
 static int g_currentSection = 0;
@@ -87,7 +87,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                        OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                        DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
         SelectObject(hdc, hSmallFont);
-        std::wstring info = L"セット3 - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
+        std::wstring info = L"セットC - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
         SIZE infoSz;
         GetTextExtentPoint32W(hdc, info.c_str(), (int)info.size(), &infoSz);
         TextOutW(hdc, rc.right - infoSz.cx - 10, 10, info.c_str(), (int)info.size());
@@ -292,7 +292,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
     int sw = work.right - work.left;
     int sh = work.bottom - work.top;
 
-    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set 3"), WS_POPUP | WS_VISIBLE,
+    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set C"), WS_POPUP | WS_VISIBLE,
         work.left, work.top, sw, sh, nullptr, nullptr, hInst, nullptr);
     if (!hWnd) return 0;
 
@@ -339,7 +339,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
                 }
                 else {
                     // All sections completed
-                    MessageBox(hWnd, _T("セット3完了！"), _T("完了"), MB_OK);
+                    MessageBox(hWnd, _T("セットC完了！"), _T("完了"), MB_OK);
                     PostQuitMessage(0);
                 }
                 g_inTarget = false;
