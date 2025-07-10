@@ -11,22 +11,62 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// 4 sections of text
-static const std::vector<std::wstring> g_sections = {
-    L"図書館で、ユキは一冊の詩集に手を伸ばした。その瞬間、同じ本に触れた手があった。そこにいた、少し年上の青年・リョウ。偶然が二人を引き合わせた",
-    L"ユキとリョウは、週末ごとに図書館で会い、本について語り合った。やがて、散歩や喫茶店にも行くようになり、彼女の胸には淡い想いが芽生え始めた",
-    L"リョウは海外留学を決意し、ユキに告げた。「また戻ってくるよ」と笑う彼に、ユキは言葉が見つからなかった。ただ「行ってらっしゃい」と微笑んだ",
-    L"1年後の冬、図書館の同じ詩集に、またふたつの手が重なった。そこには、少し大人びたリョウがいた。「ただいま」と言う声に、ユキの瞳が潤んだ"
+// セット1：四半期売上レビュー
+static const std::vector<std::wstring> g_set1 = {
+    L"来週火曜日までに四半期売上報告書の最終版を共有ドライブへアップロードしてください。",
+    L"当日は午前10時から経営陣レビュー会議があり、佐藤さんが必ず参加しますので準備を万全にお願いします。",
+    L"さらに、今月30日18時までに請求書処理をERPシステムへ入力・確定してください。",
+    L"本日中に公開された新しい顧客管理システムのオンライン研修を受講し、完了証明を提出することが必須です。",
+    L"また、明後日9時には倉庫で販促資料を受け取り、会議室Bへ搬入してください。",
+    L"最後に、ネットワークアップグレードの影響で本日21時から3時間社内Wi-Fiが停止します。",
 };
+
+// セット2：製品ローンチ準備
+static const std::vector<std::wstring> g_set2 = {
+    L"今週金曜日までに製品紹介スライドの最新版をマーケティング共有フォルダへ保存してください。",
+    L"同じ日の午後2時にはメディア向けデモがあり、鈴木さんが登壇しますので、リハーサルを含む準備をお願いいたします。",
+    L"併せて、今月28日16時までに予算申請を経理システムへ提出してください。",
+    L"本日中に新しいロゴガイドラインのオンライン講座を視聴し、完了報告を提出することが必須です。",
+    L"明朝8時には倉庫でデモ機を受け取り、ホールCへ搬入してください。",
+    L"加えて、電源工事のため本日20時から1時間ショールームの照明が消灯します。",
+    L"作業計画に留意しつつ、顧客登録フォームのデータをJSON形式で木曜日18時までに私へ共有してください。"
+};
+
+// セット3：年次カンファレンス準備
+static const std::vector<std::wstring> g_set3 = {
+    L"来週水曜日までに年次会議の議題案を共有ドライブの\"Conference25\"フォルダへアップロードしてください。",
+    L"同日の午前11時には基調講演リハーサルがあり、高橋さんが必ず参加しますので対応をお願いします。",
+    L"また、今月27日15時までに旅費精算を旅費システムへ登録してください。",
+    L"本日中に参加者管理アプリのチュートリアル動画を視聴し、完了スクリーンショットを提出してください。",
+    L"さらに、明後日7時に印刷会社でパンフレットを受け取り、ホールDへ搬入する手配をお願いします。",
+    L"なお、クラウドメンテナンスのため本日23時から2時間オンライン登録サイトが停止します。",
+    L"この時間帯を避けて作業を進めつつ、参加者アンケートの初期集計をGoogleスプレッドシート形式で木曜日20時までに私へ送付してください。"
+};
+
+// 全セットを結合
+static std::vector<std::wstring> g_sections;
+static int g_currentSet = 0; // 現在のセット番号 (0, 1, 2)
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 40; // tolerance around last character
-constexpr int kDwellTimeMs = 1000; //5 gaze dwell time before advancing (in milliseconds)
+constexpr int kDwellTimeMs = 500; //5 gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;
-static bool g_showGaze = true; // toggle visualization
+static bool g_showGaze = false; // toggle visualization - disabled by default to reduce flickering
 static bool g_seenFirst = false; // whether the first char has been gazed at in current section
+
+// Initialize sections with the first set
+void initializeSections() {
+    g_sections.clear();
+    switch (g_currentSet) {
+    case 0: g_sections = g_set1; break;
+    case 1: g_sections = g_set2; break;
+    case 2: g_sections = g_set3; break;
+    }
+    g_currentSection = 0;
+    g_seenFirst = false;
+}
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -55,6 +95,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         int x = (rc.right - sz.cx) / 2;
         int y = (rc.bottom - sz.cy) / 2;
         TextOutW(hdc, x, y, text.c_str(), (int)text.size());
+
+        // Display set and section info in top-right corner
+        HFONT hSmallFont = CreateFontW(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
+                                       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
+                                       DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
+        SelectObject(hdc, hSmallFont);
+        std::wstring info = L"セット " + std::to_wstring(g_currentSet + 1) + L"/3 - " +
+                           std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
+        SIZE infoSz;
+        GetTextExtentPoint32W(hdc, info.c_str(), (int)info.size(), &infoSz);
+        TextOutW(hdc, rc.right - infoSz.cx - 10, 10, info.c_str(), (int)info.size());
+        DeleteObject(hSmallFont);
+
+        SelectObject(hdc, old);
+        DeleteObject(hFont);
 
         // compute last char rect for debug if needed
         SIZE szLast;
@@ -88,8 +143,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        SelectObject(hdc, old);
-        DeleteObject(hFont);
         EndPaint(hWnd, &ps);
         return 0;
     }
@@ -101,8 +154,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         return 0;
     case WM_TIMER:
-        // Only invalidate if gaze data was updated
-        if (g_gazeUpdated.exchange(false)) {
+        // Reduce flickering by limiting redraws - only update gaze visualization when needed
+        if (g_showGaze && g_gazeUpdated.exchange(false)) {
+            // Only invalidate the gaze area instead of the whole window
             InvalidateRect(hWnd, nullptr, FALSE);
         }
         return 0;
@@ -210,6 +264,9 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
         work.left, work.top, sw, sh, nullptr, nullptr, hInst, nullptr);
     if (!hWnd) return 0;
 
+    // Initialize with first set
+    initializeSections();
+
     SetTimer(hWnd, 1, 16, nullptr); // refresh timer
 
     // Tobii Init
@@ -238,22 +295,35 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
             if (!g_inTarget) {
                 g_inTarget = true;
                 g_gazeStart = now;
-            }
-            else {
-                auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(now - g_gazeStart);
-                if (dur.count() > kDwellTimeMs) {
-                    // advance section
-                    if (g_currentSection < (int)g_sections.size() - 1) {
-                        g_currentSection++;
-                        InvalidateRect(hWnd, nullptr, FALSE); // force redraw on section change
-                    }
-                    g_inTarget = false;
-                    g_seenFirst = false; // reset for next section
-                }
+                // No need to invalidate here - text doesn't change
             }
         }
-        else {
-            g_inTarget = false;
+
+        // Check timer if we've started the dwell process
+        if (g_inTarget) {
+            auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(now - g_gazeStart);
+            if (dur.count() > kDwellTimeMs) {
+                // advance section
+                if (g_currentSection < (int)g_sections.size() - 1) {
+                    g_currentSection++;
+                    InvalidateRect(hWnd, nullptr, FALSE); // force redraw on section change
+                }
+                else {
+                    // Move to next set if available
+                    if (g_currentSet < 2) { // We have 3 sets (0, 1, 2)
+                        g_currentSet++;
+                        initializeSections();
+                        InvalidateRect(hWnd, nullptr, FALSE);
+                    }
+                    else {
+                        // All sets completed - could restart or exit
+                        MessageBox(hWnd, _T("実験完了！"), _T("完了"), MB_OK);
+                        PostQuitMessage(0);
+                    }
+                }
+                g_inTarget = false;
+                g_seenFirst = false; // reset for next section
+            }
         }
     }
 
