@@ -11,36 +11,37 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// セット1：四半期売上レビュー
+// 電気設備更新工事に関する通知
 static const std::vector<std::wstring> g_set1 = {
-    L"来週火曜日までに四半期売上報告書の最終版を共有ドライブへアップロードしてください。",
-    L"当日は午前10時から経営陣レビュー会議があり、佐藤さんが必ず参加しますので準備を万全にお願いします。",
-    L"さらに、今月30日18時までに請求書処理をERPシステムへ入力・確定してください。",
-    L"本日中に公開された新しい顧客管理システムのオンライン研修を受講し、完了証明を提出することが必須です。",
-    L"また、明後日9時には倉庫で販促資料を受け取り、会議室Bへ搬入してください。",
-    L"最後に、ネットワークアップグレードの影響で本日21時から3時間社内Wi-Fiが停止します。",
+    L"二〇二五年九月十日（火）午前零時から同日二十四時まで、\n本社ビル全十五基のエレベーターを制御盤交換工事のため終日停止いたします。",
+    L"この工事により、人の上下移動は非常階段に限定されるため、総務部は九月九日（月）十八時までに\n階段照明の点灯確認と避難誘導サインの追加設置を完了してください。",
+    L"各部署は九月九日（月）業務終了時までに大型機材や大量資料のフロア間移動を済ませ、\n当日搬出入を伴う会議や来客対応を極力回避するよう予定を調整してください。",
+    L"身体に不自由のある社員や来訪者向けに、一階ロビーに臨時ワークスペース（Wi-Fi・電源完備）を用意しますので、\n必要な方は人事部まで利用申請をお願いします。",
+    L"停電を伴わない工事ですが、エレベーター内監視カメラおよび管制室の監視装置は一時的にオフラインとなるため、\n施設警備課は人員を増強し、監視強化を実施します。",
+    L"工事完了後、ビル管理会社が稼働試験を行い、九月十一日（水）午前六時までに全基の安全確認が取れ次第、\n社内メールで運行再開をお知らせします。",
+    L"以上、エレベーター制御盤交換という単一の原因に起因する措置となりますので、\n安全確保と業務継続のため、皆さまのご理解とご協力をお願いいたします。"
 };
 
-// セット2：製品ローンチ準備
+// セット2：配管工事（実験用）
 static const std::vector<std::wstring> g_set2 = {
-    L"今週金曜日までに製品紹介スライドの最新版をマーケティング共有フォルダへ保存してください。",
-    L"同じ日の午後2時にはメディア向けデモがあり、鈴木さんが登壇しますので、リハーサルを含む準備をお願いいたします。",
-    L"併せて、今月28日16時までに予算申請を経理システムへ提出してください。",
-    L"本日中に新しいロゴガイドラインのオンライン講座を視聴し、完了報告を提出することが必須です。",
-    L"明朝8時には倉庫でデモ機を受け取り、ホールCへ搬入してください。",
-    L"加えて、電源工事のため本日20時から1時間ショールームの照明が消灯します。",
-    L"作業計画に留意しつつ、顧客登録フォームのデータをJSON形式で木曜日18時までに私へ共有してください。"
+    L"二〇二五年十月五日（日）午前五時から同日十八時まで、\n研究棟全域において老朽配管更新工事のため計画断水を実施いたします。",
+    L"これにより上水・温水・実験用純水のすべてが停止するため、ラボ責任者は十月四日（土）二十時までに\n水を要する実験を終了し、培養装置や循環冷却水系を安全停止してください。",
+    L"メンテナンス中は消火栓も使用不可となるため、安全衛生委員会は追加の消火器を各フロア非常口脇に設置し、\n設置完了を十月四日（土）二十二時までに報告書で提出してください。",
+    L"給湯室・化粧室の水道も停止するため、総務部は隣接ビル一階の仮設トイレと手洗いステーションの設置を手配し、\n利用案内を掲示してください。",
+    L"動物飼育室の自動給水ラインは別系統で稼働しますが、念のため飼育担当者は工事開始前に手動で給水量を確認し、\n異常があれば直ちに施設管理課へ連絡してください。",
+    L"工事完了後の十月五日（日）十九時以降、施設管理課が残留塩素濃度と水圧を測定し、\n安全が確認されしだい一斉メールで断水解除を通知します。",
+    L"以上、老朽配管更新という単一の要因に起因する措置となりますので、\n研究データ保全と安全確保のため、関係各位のご協力を強くお願い申し上げます。"
 };
 
-// セット3：年次カンファレンス準備
+// セット3：駐車場工事（実験用）
 static const std::vector<std::wstring> g_set3 = {
-    L"来週水曜日までに年次会議の議題案を共有ドライブの\"Conference25\"フォルダへアップロードしてください。",
-    L"同日の午前11時には基調講演リハーサルがあり、高橋さんが必ず参加しますので対応をお願いします。",
-    L"また、今月27日15時までに旅費精算を旅費システムへ登録してください。",
-    L"本日中に参加者管理アプリのチュートリアル動画を視聴し、完了スクリーンショットを提出してください。",
-    L"さらに、明後日7時に印刷会社でパンフレットを受け取り、ホールDへ搬入する手配をお願いします。",
-    L"なお、クラウドメンテナンスのため本日23時から2時間オンライン登録サイトが停止します。",
-    L"この時間帯を避けて作業を進めつつ、参加者アンケートの初期集計をGoogleスプレッドシート形式で木曜日20時までに私へ送付してください。"
+    L"二〇二五年十一月十四日（金）午前五時から同日十五時まで、\n本社ビル駐車場をアスファルト舗装改修工事のため全面閉鎖いたします。",
+    L"閉鎖中は車両の入退場が禁止されるため、警備課は十一月十三日（木）十八時までに\n交通コーンと案内看板を設置し、迂回ルートを明示します。",
+    L"車で通勤する社員は当日「イーストタワーガレージ」を利用し、\n利用料金（一人一日一五〇〇円を上限）を領収書とともに総務部へ申請してください。",
+    L"当日納品予定の配送トラックは日程を変更するか、\n工事終了後の十六時以降に南門荷さばきエリアを利用してください。",
+    L"工事による振動のため、隣接する自転車置き場も閉鎖し、代替として正面玄関付近に臨時ラックを設置しますので、\n自転車通勤者はそちらをお使いください。",
+    L"騒音と舗装材の臭気を考慮し、人事部は希望部署にテレワークを許可します。\n各マネージャーは十一月十二日（水）正午までにテレワーク予定者一覧を提出してください。",
+    L"舗装後の冷却とライン引きが完了し次第、十一月十五日（土）午前六時に駐車場を再開し、\n施設管理課が社内メールで通知します。"
 };
 
 // 全セットを結合
@@ -90,11 +91,33 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                   DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
         HFONT old = (HFONT)SelectObject(hdc, hFont);
 
-        SIZE sz;
-        GetTextExtentPoint32W(hdc, text.c_str(), (int)text.size(), &sz);
-        int x = (rc.right - sz.cx) / 2;
-        int y = (rc.bottom - sz.cy) / 2;
-        TextOutW(hdc, x, y, text.c_str(), (int)text.size());
+        // Split text by newlines and draw multiple lines
+        std::vector<std::wstring> lines;
+        std::wstring currentLine;
+        for (wchar_t c : text) {
+            if (c == L'\n') {
+                lines.push_back(currentLine);
+                currentLine.clear();
+            } else {
+                currentLine += c;
+            }
+        }
+        if (!currentLine.empty()) {
+            lines.push_back(currentLine);
+        }
+
+        // Calculate total height and draw centered
+        int lineHeight = 40; // Line spacing
+        int totalHeight = (int)lines.size() * lineHeight;
+        int startY = (rc.bottom - totalHeight) / 2;
+        
+        for (size_t i = 0; i < lines.size(); ++i) {
+            SIZE sz;
+            GetTextExtentPoint32W(hdc, lines[i].c_str(), (int)lines[i].size(), &sz);
+            int x = (rc.right - sz.cx) / 2;
+            int y = startY + (int)i * lineHeight;
+            TextOutW(hdc, x, y, lines[i].c_str(), (int)lines[i].size());
+        }
 
         // Display set and section info in top-right corner
         HFONT hSmallFont = CreateFontW(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
@@ -112,10 +135,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         DeleteObject(hFont);
 
         // compute last char rect for debug if needed
-        SIZE szLast;
-        GetTextExtentPoint32W(hdc, text.c_str() + text.size() - 1, 1, &szLast);
-        RECT lastRect{ x + sz.cx - szLast.cx, y, x + sz.cx, y + sz.cy };
-        FrameRect(hdc, &lastRect, (HBRUSH)GetStockObject(GRAY_BRUSH)); // visualize target
+        if (!lines.empty()) {
+            std::wstring lastLine = lines.back();
+            SIZE szLastLine, szLastChar;
+            GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
+            GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
+            int lastX = (rc.right - szLastLine.cx) / 2;
+            int lastY = startY + ((int)lines.size() - 1) * lineHeight;
+            RECT lastRect{ lastX + szLastLine.cx - szLastChar.cx, lastY, lastX + szLastLine.cx, lastY + 32 };
+            FrameRect(hdc, &lastRect, (HBRUSH)GetStockObject(GRAY_BRUSH)); // visualize target
+        }
 
         // Draw gaze point if visualization enabled
         if (g_showGaze)
@@ -199,12 +228,37 @@ bool isInsideLastChar(HWND hWnd)
         OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
         DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
     HFONT old = (HFONT)SelectObject(hdc, hFont);
-    SIZE szText, szLast;
-    GetTextExtentPoint32W(hdc, text.c_str(), (int)text.size(), &szText);
-    GetTextExtentPoint32W(hdc, text.c_str() + text.size() - 1, 1, &szLast);
-    int x = (rc.right - szText.cx) / 2;
-    int y = (rc.bottom - szText.cy) / 2;
-    RECT last{ x + szText.cx - szLast.cx, y, x + szText.cx, y + szText.cy };
+    
+    // Split text by newlines
+    std::vector<std::wstring> lines;
+    std::wstring currentLine;
+    for (wchar_t c : text) {
+        if (c == L'\n') {
+            lines.push_back(currentLine);
+            currentLine.clear();
+        } else {
+            currentLine += c;
+        }
+    }
+    if (!currentLine.empty()) {
+        lines.push_back(currentLine);
+    }
+    
+    RECT last{};
+    if (!lines.empty()) {
+        std::wstring lastLine = lines.back();
+        SIZE szLastLine, szLastChar;
+        GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
+        GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
+        
+        int lineHeight = 40;
+        int totalHeight = (int)lines.size() * lineHeight;
+        int startY = (rc.bottom - totalHeight) / 2;
+        int lastX = (rc.right - szLastLine.cx) / 2;
+        int lastY = startY + ((int)lines.size() - 1) * lineHeight;
+        last = { lastX + szLastLine.cx - szLastChar.cx, lastY, lastX + szLastLine.cx, lastY + 32 };
+    }
+    
     SelectObject(hdc, old);
     DeleteObject(hFont);
     ReleaseDC(hWnd, hdc);
@@ -232,12 +286,36 @@ bool isInsideFirstChar(HWND hWnd)
         OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
         DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
     HFONT old = (HFONT)SelectObject(hdc, hFont);
-    SIZE szText, szFirst;
-    GetTextExtentPoint32W(hdc, text.c_str(), (int)text.size(), &szText);
-    GetTextExtentPoint32W(hdc, text.c_str(), 1, &szFirst);
-    int x = (rc.right - szText.cx) / 2;
-    int y = (rc.bottom - szText.cy) / 2;
-    RECT first{ x, y, x + szFirst.cx, y + szText.cy };
+    
+    // Split text by newlines
+    std::vector<std::wstring> lines;
+    std::wstring currentLine;
+    for (wchar_t c : text) {
+        if (c == L'\n') {
+            lines.push_back(currentLine);
+            currentLine.clear();
+        } else {
+            currentLine += c;
+        }
+    }
+    if (!currentLine.empty()) {
+        lines.push_back(currentLine);
+    }
+    
+    RECT first{};
+    if (!lines.empty()) {
+        std::wstring firstLine = lines[0];
+        SIZE szFirstLine, szFirstChar;
+        GetTextExtentPoint32W(hdc, firstLine.c_str(), (int)firstLine.size(), &szFirstLine);
+        GetTextExtentPoint32W(hdc, firstLine.c_str(), 1, &szFirstChar);
+        
+        int lineHeight = 40;
+        int totalHeight = (int)lines.size() * lineHeight;
+        int startY = (rc.bottom - totalHeight) / 2;
+        int firstX = (rc.right - szFirstLine.cx) / 2;
+        first = { firstX, startY, firstX + szFirstChar.cx, startY + 32 };
+    }
+    
     SelectObject(hdc, old);
     DeleteObject(hFont);
     ReleaseDC(hWnd, hdc);
