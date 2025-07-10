@@ -49,12 +49,12 @@ static std::vector<std::wstring> g_sections;
 static int g_currentSet = 0; // 現在のセット番号 (0, 1, 2)
 static int g_currentSection = 0;
 
-constexpr int kGazeMarginPx = 40; // tolerance around last character
+constexpr int kGazeMarginPx = 80; // tolerance around last character - increased for better detection
 constexpr int kDwellTimeMs = 500; //5 gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;
-static bool g_showGaze = false; // toggle visualization - disabled by default to reduce flickering
+static bool g_showGaze = true; // toggle visualization - enabled by default for debugging
 static bool g_seenFirst = false; // whether the first char has been gazed at in current section
 
 // Initialize sections with the first set
@@ -107,7 +107,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
 
         // Calculate total height and draw centered
-        int lineHeight = 40; // Line spacing
+        int lineHeight = 60; // Line spacing - increased for better readability
         int totalHeight = (int)lines.size() * lineHeight;
         int startY = (rc.bottom - totalHeight) / 2;
         
@@ -137,13 +137,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         // compute last char rect for debug if needed
         if (!lines.empty()) {
             std::wstring lastLine = lines.back();
-            SIZE szLastLine, szLastChar;
-            GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
-            GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
-            int lastX = (rc.right - szLastLine.cx) / 2;
-            int lastY = startY + ((int)lines.size() - 1) * lineHeight;
-            RECT lastRect{ lastX + szLastLine.cx - szLastChar.cx, lastY, lastX + szLastLine.cx, lastY + 32 };
-            FrameRect(hdc, &lastRect, (HBRUSH)GetStockObject(GRAY_BRUSH)); // visualize target
+            if (!lastLine.empty()) {
+                SIZE szLastLine, szLastChar;
+                GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
+                GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
+                int lastX = (rc.right - szLastLine.cx) / 2;
+                int lastY = startY + ((int)lines.size() - 1) * lineHeight;
+                RECT lastRect{ lastX + szLastLine.cx - szLastChar.cx, lastY, lastX + szLastLine.cx, lastY + 32 };
+                
+                // Target area calculation (no longer visualized)
+            }
         }
 
         // Draw gaze point if visualization enabled
@@ -247,16 +250,21 @@ bool isInsideLastChar(HWND hWnd)
     RECT last{};
     if (!lines.empty()) {
         std::wstring lastLine = lines.back();
-        SIZE szLastLine, szLastChar;
-        GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
-        GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
-        
-        int lineHeight = 40;
-        int totalHeight = (int)lines.size() * lineHeight;
-        int startY = (rc.bottom - totalHeight) / 2;
-        int lastX = (rc.right - szLastLine.cx) / 2;
-        int lastY = startY + ((int)lines.size() - 1) * lineHeight;
-        last = { lastX + szLastLine.cx - szLastChar.cx, lastY, lastX + szLastLine.cx, lastY + 32 };
+        if (!lastLine.empty()) {
+            SIZE szLastLine, szLastChar;
+            GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
+            GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
+            
+            int lineHeight = 60;
+            int totalHeight = (int)lines.size() * lineHeight;
+            int startY = (rc.bottom - totalHeight) / 2;
+            int lastX = (rc.right - szLastLine.cx) / 2;
+            int lastY = startY + ((int)lines.size() - 1) * lineHeight;
+            
+            // Create a more generous bounding box for the last character
+            last = { lastX + szLastLine.cx - szLastChar.cx - 10, lastY - 5, 
+                    lastX + szLastLine.cx + 10, lastY + 37 };
+        }
     }
     
     SelectObject(hdc, old);
@@ -309,7 +317,7 @@ bool isInsideFirstChar(HWND hWnd)
         GetTextExtentPoint32W(hdc, firstLine.c_str(), (int)firstLine.size(), &szFirstLine);
         GetTextExtentPoint32W(hdc, firstLine.c_str(), 1, &szFirstChar);
         
-        int lineHeight = 40;
+        int lineHeight = 60;
         int totalHeight = (int)lines.size() * lineHeight;
         int startY = (rc.bottom - totalHeight) / 2;
         int firstX = (rc.right - szFirstLine.cx) / 2;
