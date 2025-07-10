@@ -49,7 +49,7 @@ static std::vector<std::wstring> g_sections;
 static int g_currentSet = 0; // 現在のセット番号 (0, 1, 2)
 static int g_currentSection = 0;
 
-constexpr int kGazeMarginPx = 80; // tolerance around last character - increased for better detection
+constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
 constexpr int kDwellTimeMs = 500; //5 gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
@@ -107,7 +107,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
 
         // Calculate total height and draw centered
-        int lineHeight = 60; // Line spacing - increased for better readability
+        int lineHeight = 80; // Line spacing - increased further for better readability
         int totalHeight = (int)lines.size() * lineHeight;
         int startY = (rc.bottom - totalHeight) / 2;
         
@@ -255,7 +255,7 @@ bool isInsideLastChar(HWND hWnd)
             GetTextExtentPoint32W(hdc, lastLine.c_str(), (int)lastLine.size(), &szLastLine);
             GetTextExtentPoint32W(hdc, lastLine.c_str() + lastLine.size() - 1, 1, &szLastChar);
             
-            int lineHeight = 60;
+            int lineHeight = 80;
             int totalHeight = (int)lines.size() * lineHeight;
             int startY = (rc.bottom - totalHeight) / 2;
             int lastX = (rc.right - szLastLine.cx) / 2;
@@ -317,7 +317,7 @@ bool isInsideFirstChar(HWND hWnd)
         GetTextExtentPoint32W(hdc, firstLine.c_str(), (int)firstLine.size(), &szFirstLine);
         GetTextExtentPoint32W(hdc, firstLine.c_str(), 1, &szFirstChar);
         
-        int lineHeight = 60;
+        int lineHeight = 80;
         int totalHeight = (int)lines.size() * lineHeight;
         int startY = (rc.bottom - totalHeight) / 2;
         int firstX = (rc.right - szFirstLine.cx) / 2;
