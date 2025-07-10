@@ -122,4 +122,33 @@ target_link_libraries(tobii_pro_sequence "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_res
 
 add_custom_command(TARGET tobii_pro_sequence POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence>)
 
-install(TARGETS tobii_pro_sequence RUNTIME DESTINATION bin) 
+install(TARGETS tobii_pro_sequence RUNTIME DESTINATION bin)
+
+# reading sequence set 1
+add_executable(tobii_pro_sequence_set1 WIN32 src/tobii_pro_sequence_set1.cpp)
+
+target_include_directories(tobii_pro_sequence_set1 PRIVATE ${TOBII_PRO_SDK_INCLUDE})
+
+target_link_libraries(tobii_pro_sequence_set1 "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.lib" gdi32 user32)
+
+add_custom_command(TARGET tobii_pro_sequence_set1 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence_set1>)
+
+# reading sequence set 2
+add_executable(tobii_pro_sequence_set2 WIN32 src/tobii_pro_sequence_set2.cpp)
+
+target_include_directories(tobii_pro_sequence_set2 PRIVATE ${TOBII_PRO_SDK_INCLUDE})
+
+target_link_libraries(tobii_pro_sequence_set2 "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.lib" gdi32 user32)
+
+add_custom_command(TARGET tobii_pro_sequence_set2 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence_set2>)
+
+# reading sequence set 3
+add_executable(tobii_pro_sequence_set3 WIN32 src/tobii_pro_sequence_set3.cpp)
+
+target_include_directories(tobii_pro_sequence_set3 PRIVATE ${TOBII_PRO_SDK_INCLUDE})
+
+target_link_libraries(tobii_pro_sequence_set3 "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.lib" gdi32 user32)
+
+add_custom_command(TARGET tobii_pro_sequence_set3 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence_set3>)
+
+install(TARGETS tobii_pro_sequence_set1 tobii_pro_sequence_set2 tobii_pro_sequence_set3 RUNTIME DESTINATION bin) 
