@@ -13,19 +13,19 @@ static std::atomic<bool> g_gazeUpdated{ false };
 
 // セットA：メールサーバー緊急メンテナンス
 static const std::vector<std::wstring> g_sections = {
-    L"11 月 3 日（火）21:00〜22:00 に社内メールサーバーの緊急メンテナンスを実施します。\nこの時間はすべてのメール送受信が停止します。",
-    L"社員は20:45 までに重要メールを送信してください。\n未送信のドラフトはメンテ開始時に破棄される可能性があります。",
-    L"メンテ中の連絡は社内チャットを利用してください。\n緊急時は内線電話で連絡を取ってください。",
-    L"IT チームは作業前にメールデータを完全バックアップします。\n作業後にリストアテストを行い整合性を確認します。",
-    L"延長の恐れがある場合、IT は21:40 に進捗をチャットで通知します。\nその際に新しい終了予定時刻をお知らせします。",
-    L"メールサービスは完了後22:10 までに自動再起動します。\n再開を確認し次第、チャットで復旧報告を投稿します。",
-    L"今回のメンテで迷惑メールフィルターが強化されます。\nご理解とご協力をよろしくお願いいたします。"
+    L"11月3日の夜9時から10時まで、\nメールサーバーの工事をします。",
+    L"夜8時45分までに、\n大事なメールを送ってください。",
+    L"工事中は、\nチャットか電話を使ってください。",
+    L"ITチームは、\nメールを安全に保存します。",
+    L"工事が長引く時は、\n夜9時40分にお知らせします。",
+    L"工事が終わったら、\nメールが自動で復旧します。",
+    L"今回の工事で、\n迷惑メールが減ります。"
 };
 
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
-constexpr int kDwellTimeMs = 100; // gaze dwell time before advancing (in milliseconds)
+constexpr int kDwellTimeMs = 1000; // gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;

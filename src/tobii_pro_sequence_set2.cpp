@@ -13,19 +13,19 @@ static std::atomic<bool> g_gazeUpdated{ false };
 
 // セットB：空調フィルター交換
 static const std::vector<std::wstring> g_sections = {
-    L"11 月 10 日（火）08:00〜12:00 にオフィス全館の空調フィルター交換を行います。\n作業中は空調が一時停止します。",
-    L"社員は07:55 までに窓を少し開けて換気を確保してください。\n温度が下がる場合は上着を用意してください。",
-    L"交換スタッフが各部屋に入室しますので機密資料を片づけてください。\n入室時にはスタッフが入館証を提示します。",
-    L"作業音が発生するためオンライン会議は午後以降に移動してください。\n移動が難しい場合はヘッドセットの使用を推奨します。",
-    L"予定より作業が延びる場合、総務は10:30 に状況をメールで共有します。\n延長が決定したら終了予定時刻も合わせて知らせます。",
-    L"フィルター交換後、空調は自動的に再起動します。\n再起動完了を館内放送で案内します。",
-    L"新フィルターにより空気清浄効率が向上します。\n快適な職場環境づくりにご協力をお願いします。"
+    L"11月10日の朝8時から昼12時まで、\n空調のフィルターを交換します。",
+    L"朝7時55分までに、\n窓を少し開けて上着を用意してください。",
+    L"作業員が部屋に入るので、\n大事な書類を片付けてください。",
+    L"作業音がするので、\nオンライン会議は午後にしてください。",
+    L"作業が長引く時は、\n朝10時30分にお知らせします。",
+    L"フィルター交換が終わったら、\n空調が自動で動き出します。",
+    L"新しいフィルターで、\n空気がきれいになります。"
 };
 
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
-constexpr int kDwellTimeMs = 100; // gaze dwell time before advancing (in milliseconds)
+constexpr int kDwellTimeMs = 1000; // gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;

@@ -13,19 +13,19 @@ static std::atomic<bool> g_gazeUpdated{ false };
 
 // セットC：勤怠システムアップデート
 static const std::vector<std::wstring> g_sections = {
-    L"11 月 12 日（木）18:00〜20:00 に勤怠打刻システムのアップデートを実施します。\nこの間は出退勤の打刻ができません。",
-    L"社員は17:55 までに退勤予定の方は事前打刻を行ってください。\n事前打刻が難しい場合は人事にメール報告してください。",
-    L"アップデート中の勤怠データは自動バックアップされます。\n復元テストはアップデート直後に行います。",
-    L"作業時間中に出社・退社する場合は紙の臨時記録表に記入してください。\n翌営業日に人事がシステムへ入力します。",
-    L"進捗が遅れる場合、IT は19:15 にチャットで経過報告を送ります。\n延長する場合は新しい完了時刻も案内します。",
-    L"アップデート完了後、システムは20:10 までに再起動します。\n再開確認後にポータル掲示板へ通知を掲載します。",
-    L"新バージョンでは打刻ミス自動検知機能が追加されます。\nご理解とご協力をお願いいたします。"
+    L"11月12日の夕方6時から8時まで、\n出勤時刻システムの更新をします。",
+    L"夕方5時55分までに、\n帰る人は先に打刻してください。",
+    L"更新中は、\nデータを安全に保存します。",
+    L"更新中に出入りする時は、\n紙に時間を書いてください。",
+    L"更新が長引く時は、\n夜7時15分にお知らせします。",
+    L"更新が終わったら、\nシステムが自動で復旧します。",
+    L"新しいシステムでは、\n打刻ミスを自動で見つけます。"
 };
 
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
-constexpr int kDwellTimeMs = 100; // gaze dwell time before advancing (in milliseconds)
+constexpr int kDwellTimeMs = 1000; // gaze dwell time before advancing (in milliseconds)
 
 static std::chrono::steady_clock::time_point g_gazeStart;
 static bool g_inTarget = false;
