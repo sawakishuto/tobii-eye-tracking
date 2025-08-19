@@ -11,15 +11,12 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// セットA：メールサーバー緊急メンテナンス
+// セットA：データ分析研修レポート
 static const std::vector<std::wstring> g_sections = {
-    L"11月3日の夜9時から10時まで、\nメールサーバーの工事をします。",
-    L"夜8時45分までに、\n大事なメールを送ってください。",
-    L"工事中は、\nチャットか電話を使ってください。",
-    L"ITチームは、\nメールを安全に保存します。",
-    L"工事が長引く時は、\n夜9時40分にお知らせします。",
-    L"工事が終わったら、\nメールが自動で復旧します。",
-    L"今回の工事で、\n迷惑メールが減ります。"
+    L"会社のデジタル化を円滑に進めるため、新しいデータ分析やAIの活用方法を\n基礎から学ぶ研修に参加しました。これまでは個人の経験や勘に頼って判断する\n場面が多く、スピードや正確性に課題を感じていました。今回の研修を通じて、\n数字という客観的な根拠に基づいて物事を判断できるようになり、そのための\n土台を築きたいと考えました。",
+    L"研修は3日間にわたって行われ、前半で統計の基本的な考え方や最新ツールの\n使い方を学び、後半では会社の実際のデータを使って分析の練習をしました。\n特に、Pythonというプログラミング言語と、データをグラフなどで分かりやすく\n見せるBIツールを連携させ、マーケティング部門が持つ見込み顧客の情報を分析した\n実習は、自社の営業活動に直接役立つ内容で、とても理解が深まりました。",
+    L"研修を受けたことで、「なぜこの分析手法を選んだのか」を筋道を立てて説明\nできるようになり、上司への報告書を以前よりスムーズに作成できるようになり\nました。また、研修で作った分析画面（ダッシュボード）の試作品を部署内で\n共有したところ、他の部署からも「ぜひ活用したい」という声が上がりました。\nこれまで感覚的な意見交換になりがちだった会議で、具体的なデータを示すことで、\nスムーズに結論を出せるようになった点は大きな成果だと感じています。",
+    L"学んだ知識を今後の仕事でしっかりと活かしていくことが次の課題です。まずは、\n研修で作成した分析画面を、いつでも社内システムで見られるように環境を整え、\n誰が閲覧できるかといった運用ルールを整備します。その上で、分析ツールを\n使える人とそうでない人の差をなくすため、実際に操作しながら学べる社内勉強会を\n企画し、部署全体のスキルアップを図っていきたいと考えています。"
 };
 
 static int g_currentSection = 0;
@@ -307,7 +304,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
     int sw = work.right - work.left;
     int sh = work.bottom - work.top;
 
-    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set A"), WS_POPUP | WS_VISIBLE,
+    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("データ分析研修レポート"), WS_POPUP | WS_VISIBLE,
         work.left, work.top, sw, sh, nullptr, nullptr, hInst, nullptr);
     if (!hWnd) return 0;
 
@@ -354,7 +351,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
                 }
                 else {
                     // All sections completed
-                    MessageBox(hWnd, _T("セットA完了！"), _T("完了"), MB_OK);
+                    MessageBox(hWnd, _T("データ分析研修レポート完了！"), _T("完了"), MB_OK);
                     PostQuitMessage(0);
                 }
                 g_inTarget = false;
