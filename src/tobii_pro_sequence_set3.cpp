@@ -19,6 +19,8 @@ static const std::vector<std::wstring> g_sections = {
     L"緊急の対応として、問題となった入札はすぐに辞退し、自治体へ謝罪文を送りま\nした。社内では、Hさんを自宅待機処分とし、関わっていたI課長も管理職から外し、\n第三者委員会による調査を受けさせています。二度とこのような問題を起こさない\nため、全社員に法律に関するeラーニングを義務付け、評価項目に「ルールを守って\nいるか」という視点を加えます。また、会社の機密情報が不正にやり取りされて\nいないか監視するシステムを導入し、定期的にチェックする体制を整えました。"
 };
 
+// https://docs.google.com/forms/d/e/1FAIpQLSd2zlpgSSqp8xYSSZYzjhofR-wfqqFIwUzlQcHKTa-MFpEe0g/viewform
+
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection

@@ -19,6 +19,8 @@ static const std::vector<std::wstring> g_sections = {
     L"現状では手で入力することが多く、数字をまとめるのに時間がかかっているため、\nこれを自動化することが次の課題です。具体的には、今使っているタスク管理\nシステムと連携させ、作業時間などを自動で取り込めるようにします。また、\n目標の決め方が部署によって違うため、会社全体で共通の目標を設定し、部署を\nまたいだ比較や分析ができるようにする計画です。最終的には、分析画面\n（ダッシュボード）でいつでも最新の進捗状況を見られるようにし、経営会議\nなどでもすぐに情報共有できる環境を目指します。"
 };
 
+// https://docs.google.com/forms/d/e/1FAIpQLSerrJenkbpvusnuBGsY8t-nUxMVaJeetYlKWFbGELS8i43zKA/viewform?usp=dialog
+
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection

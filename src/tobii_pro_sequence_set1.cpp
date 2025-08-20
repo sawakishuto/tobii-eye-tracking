@@ -18,7 +18,7 @@ static const std::vector<std::wstring> g_sections = {
     L"研修を受けたことで、「なぜこの分析手法を選んだのか」を筋道を立てて説明\nできるようになり、上司への報告書を以前よりスムーズに作成できるようになり\nました。また、研修で作った分析画面（ダッシュボード）の試作品を部署内で\n共有したところ、他の部署からも「ぜひ活用したい」という声が上がりました。\nこれまで感覚的な意見交換になりがちだった会議で、具体的なデータを示すことで、\nスムーズに結論を出せるようになった点は大きな成果だと感じています。",
     L"学んだ知識を今後の仕事でしっかりと活かしていくことが次の課題です。まずは、\n研修で作成した分析画面を、いつでも社内システムで見られるように環境を整え、\n誰が閲覧できるかといった運用ルールを整備します。その上で、分析ツールを\n使える人とそうでない人の差をなくすため、実際に操作しながら学べる社内勉強会を\n企画し、部署全体のスキルアップを図っていきたいと考えています。"
 };
-
+// https://docs.google.com/forms/d/e/1FAIpQLSflz0nDmUruxVsWAa15xtWDYBPewZtaEKZNfx6-v-Cih3-Olw/viewform
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection

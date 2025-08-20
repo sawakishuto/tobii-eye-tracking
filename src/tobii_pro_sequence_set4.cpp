@@ -19,6 +19,8 @@ static const std::vector<std::wstring> g_sections = {
     L"緊急の対応として、故障した電源部品を予備のものと交換し、翌朝までにラインを\n復旧させました。二度と同じ問題を起こさないために、冷却ファンフィルターの\n掃除を毎週の点検項目に加え、忘れないように管理システムに自動で通知が出る\nように設定しました。また、機械の温度が上がりすぎた場合に早めに気づけるよう、\n警告が出る温度を60℃から58℃に引き下げました。さらに、電源部品が壊れる前に\n交換する「予防交換」のルールも作り、品質トラブルが起きるリスクを減らします。"
 };
 
+// https://docs.google.com/forms/d/e/1FAIpQLSc79KihGWynFuCyjuLvXacL_QG47iA6Ds0S5S8aURVUGDkQww/viewform
+
 static int g_currentSection = 0;
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
