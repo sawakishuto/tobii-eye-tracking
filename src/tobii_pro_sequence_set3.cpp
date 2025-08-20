@@ -11,15 +11,12 @@ static std::atomic<float> g_gazeX{ -1.f };
 static std::atomic<float> g_gazeY{ -1.f };
 static std::atomic<bool> g_gazeUpdated{ false };
 
-// セットC：勤怠システムアップデート
+// セットC：入札不正問題への対応
 static const std::vector<std::wstring> g_sections = {
-    L"11月12日の夕方6時から8時まで、\n出勤時刻システムの更新をします。",
-    L"夕方5時55分までに、\n帰る人は先に打刻してください。",
-    L"更新中は、\nデータを安全に保存します。",
-    L"更新中に出入りする時は、\n紙に時間を書いてください。",
-    L"更新が長引く時は、\n夜7時15分にお知らせします。",
-    L"更新が終わったら、\nシステムが自動で復旧します。",
-    L"新しいシステムでは、\n打刻ミスを自動で見つけます。"
+    L"2025年3月20日、当社の営業担当Hさんが、地方自治体の入札で、ライバル会社の\n見積もり金額を事前に入手し、社内チャットで共有するという問題が起きました。\nそして、その情報をもとにライバル社より1%だけ安い金額で見積もりを提出して\nいたことが発覚しました。これは法律や会社のルールに違反する重大な不正行為\nです。",
+    L"この問題は、入札先である自治体の職員が、当社から提出された見積もりファイル\nのデータ情報（プロパティ）に、ライバル会社A社の名前が含まれているのを見つけた\nことがきっかけで発覚しました。社内でHさんに事情を聞いたところ、別の会社に\n勤める友人から公開前の見積もり情報をもらい、それを部署のチャットに投稿して、\n金額を決める参考にしたことを認めました。さらに、上司であるI課長もチャットを\n見ていながら「競争が厳しいから仕方ない」と不正を止めなかった事実も確認され、\n組織全体の管理に問題があったことが明らかになりました。",
+    L"直接の原因は、営業担当Hさんの「ルールを守る」という意識が低かったことです。\nしかしその背景には、部署全体で不正を防ぐための教育がきちんと行われていな\nかったことや、成果ばかりを重視する評価制度がプレッシャーとなり、不正行為に\nつながったことがあります。この問題によって、国から罰金を科されたり、今後の\n入札に参加できなくなったりする危険性があり、会社の信用が大きく下がる恐れも\nあります。",
+    L"緊急の対応として、問題となった入札はすぐに辞退し、自治体へ謝罪文を送りま\nした。社内では、Hさんを自宅待機処分とし、関わっていたI課長も管理職から外し、\n第三者委員会による調査を受けさせています。二度とこのような問題を起こさない\nため、全社員に法律に関するeラーニングを義務付け、評価項目に「ルールを守って\nいるか」という視点を加えます。また、会社の機密情報が不正にやり取りされて\nいないか監視するシステムを導入し、定期的にチェックする体制を整えました。"
 };
 
 static int g_currentSection = 0;
@@ -292,7 +289,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
     int sw = work.right - work.left;
     int sh = work.bottom - work.top;
 
-    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("Reading Sequence - Set C"), WS_POPUP | WS_VISIBLE,
+    HWND hWnd = CreateWindowEx(0, CLASS_NAME, _T("入札不正問題への対応"), WS_POPUP | WS_VISIBLE,
         work.left, work.top, sw, sh, nullptr, nullptr, hInst, nullptr);
     if (!hWnd) return 0;
 
@@ -339,7 +336,7 @@ int APIENTRY _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, int)
                 }
                 else {
                     // All sections completed
-                    MessageBox(hWnd, _T("セットC完了！"), _T("完了"), MB_OK);
+                    MessageBox(hWnd, _T("入札不正問題への対応完了！"), _T("完了"), MB_OK);
                     PostQuitMessage(0);
                 }
                 g_inTarget = false;
