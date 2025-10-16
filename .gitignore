@@ -40,8 +40,7 @@ Makefile
 *.pch
 *.ipch
 
-# Tobii SDK（著作権の関係でSDKファイルは含めない）
-tobii_sdk/
+
 
 # ログファイル
 *.log
