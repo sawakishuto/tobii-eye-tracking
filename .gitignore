@@ -26,7 +26,6 @@ Makefile
 
 # 実行ファイル
 *.exe
-*.dll
 *.lib
 *.pdb
 *.ilk
