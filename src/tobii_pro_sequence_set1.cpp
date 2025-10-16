@@ -21,6 +21,11 @@ static const std::vector<std::wstring> g_sections = {
 // https://docs.google.com/forms/d/e/1FAIpQLSflz0nDmUruxVsWAa15xtWDYBPewZtaEKZNfx6-v-Cih3-Olw/viewform
 static int g_currentSection = 0;
 
+// ========================================
+// 参加者番号設定（実験開始前にここを変更してください）
+// ========================================
+static int g_participantNumber = 1; // 参加者番号（1-8に設定）
+
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
 constexpr int kDwellTimeMs = 1000; // gaze dwell time before advancing (in milliseconds)
 
@@ -79,16 +84,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             TextOutW(hdc, x, y, lines[i].c_str(), (int)lines[i].size());
         }
 
-        // Display section info in top-right corner
-        HFONT hSmallFont = CreateFontW(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
-                                       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-                                       DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
-        SelectObject(hdc, hSmallFont);
-        std::wstring info = L"セットA - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
-        SIZE infoSz;
-        GetTextExtentPoint32W(hdc, info.c_str(), (int)info.size(), &infoSz);
-        TextOutW(hdc, rc.right - infoSz.cx - 10, 10, info.c_str(), (int)info.size());
-        DeleteObject(hSmallFont);
+        // セクション情報は非表示（画面をクリーンに保つため）
 
         SelectObject(hdc, old);
         DeleteObject(hFont);

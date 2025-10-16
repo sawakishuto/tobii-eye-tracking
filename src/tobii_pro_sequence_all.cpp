@@ -63,7 +63,11 @@ static const std::vector<std::wstring> g_sections = {
 };
 
 static int g_currentSection = 0;
-static int g_participantNumber = 1; // 参加者番号（1-8）
+
+// ========================================
+// 参加者番号設定（実験開始前にここを変更してください）
+// ========================================
+static int g_participantNumber = 1; // 参加者番号（1-8に設定）
 
 constexpr int kGazeMarginPx = 20; // tolerance around last character - reduced for stricter detection
 constexpr int kBaseDwellTimeMs = 1000; // base gaze dwell time before advancing (in milliseconds)
@@ -202,54 +206,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
             }
         }
 
-        // Display section info and participant info in top-right corner (only if not completed)
-        if (!g_sectionCompleted) {
-            HFONT hSmallFont = CreateFontW(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
-                                           OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-                                           DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
-            SelectObject(hdc, hSmallFont);
-            
-            // セクション情報
-            std::wstring info = L"統合版 - " + std::to_wstring(g_currentSection + 1) + L"/" + std::to_wstring(g_sections.size());
-            SIZE infoSz;
-            GetTextExtentPoint32W(hdc, info.c_str(), (int)info.size(), &infoSz);
-            TextOutW(hdc, rc.right - infoSz.cx - 10, 10, info.c_str(), (int)info.size());
-            
-            // 参加者情報
-            std::wstring participantInfo = L"参加者: " + std::to_wstring(g_participantNumber) + L"/8";
-            SIZE participantSz;
-            GetTextExtentPoint32W(hdc, participantInfo.c_str(), (int)participantInfo.size(), &participantSz);
-            TextOutW(hdc, rc.right - participantSz.cx - 10, 30, participantInfo.c_str(), (int)participantInfo.size());
-            
-            // 現在の遅延時間
-            float currentDelay = getCurrentDelayTime();
-            std::wstring delayInfo = L"遅延: " + std::to_wstring(currentDelay) + L"秒";
-            SIZE delaySz;
-            GetTextExtentPoint32W(hdc, delayInfo.c_str(), (int)delayInfo.size(), &delaySz);
-            TextOutW(hdc, rc.right - delaySz.cx - 10, 50, delayInfo.c_str(), (int)delayInfo.size());
-            
-            DeleteObject(hSmallFont);
-        }
+        // 画面表示をクリーンに保つため、セクション情報・参加者情報・遅延時間は非表示
 
-        // Display control instructions in top-left corner
-        HFONT hInstructionFont = CreateFontW(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
-                                            OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-                                            DEFAULT_PITCH | FF_SWISS, L"Segoe UI");
-        SelectObject(hdc, hInstructionFont);
-        
-        std::wstring instructions[] = {
-            L"操作方法:",
-            L"1-8: 参加者番号変更",
-            L"↑↓: 参加者番号調整",
-            L"G: 視線表示切替",
-            L"クリック: 次へ進む"
-        };
-        
-        for (int i = 0; i < 5; i++) {
-            TextOutW(hdc, 10, 10 + i * 15, instructions[i].c_str(), (int)instructions[i].size());
-        }
-        
-        DeleteObject(hInstructionFont);
+        // 操作方法の説明は非表示（画面をクリーンに保つため）
 
         SelectObject(hdc, old);
         DeleteObject(hFont);
@@ -274,9 +233,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 SelectObject(hdc, oldPen);
                 DeleteObject(hDot);
 
-                // show numeric coordinates
-                std::wstring coord = L"(" + std::to_wstring(px) + L", " + std::to_wstring(py) + L")";
-                TextOutW(hdc, 10, 70, coord.c_str(), (int)coord.size());
+                // 座標表示は非表示（画面をクリーンに保つため）
             }
         }
 
