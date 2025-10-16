@@ -3,8 +3,7 @@ build/
 out/
 Debug/
 Release/
-x64/
-x86/
+
 
 # Visual Studio関連
 .vs/
