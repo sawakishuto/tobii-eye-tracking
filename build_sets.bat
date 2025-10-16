@@ -1,5 +1,5 @@
 @echo off
-echo Building all three set-specific executables...
+echo Building all four set-specific executables...
 
 REM Clean previous build
 if exist build rmdir /s /q build
@@ -35,11 +35,27 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+cmake --build . --config Release --target tobii_pro_sequence_set4
+if %errorlevel% neq 0 (
+    echo Build failed for set 4!
+    pause
+    exit /b 1
+)
+
+cmake --build . --config Release --target tobii_pro_sequence_all
+if %errorlevel% neq 0 (
+    echo Build failed for integrated version!
+    pause
+    exit /b 1
+)
+
 echo All builds completed successfully!
 echo.
 echo Executables are located in:
 echo - build\Release\tobii_pro_sequence_set1.exe
 echo - build\Release\tobii_pro_sequence_set2.exe
 echo - build\Release\tobii_pro_sequence_set3.exe
+echo - build\Release\tobii_pro_sequence_set4.exe
+echo - build\Release\tobii_pro_sequence_all.exe (統合版)
 echo.
 pause 

@@ -151,4 +151,22 @@ target_link_libraries(tobii_pro_sequence_set3 "${TOBII_PRO_SDK_LIB}/${ARCH}/tobi
 
 add_custom_command(TARGET tobii_pro_sequence_set3 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence_set3>)
 
-install(TARGETS tobii_pro_sequence_set1 tobii_pro_sequence_set2 tobii_pro_sequence_set3 RUNTIME DESTINATION bin) 
+# reading sequence set 4
+add_executable(tobii_pro_sequence_set4 WIN32 src/tobii_pro_sequence_set4.cpp)
+
+target_include_directories(tobii_pro_sequence_set4 PRIVATE ${TOBII_PRO_SDK_INCLUDE})
+
+target_link_libraries(tobii_pro_sequence_set4 "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.lib" gdi32 user32)
+
+add_custom_command(TARGET tobii_pro_sequence_set4 POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence_set4>)
+
+# reading sequence all (integrated version)
+add_executable(tobii_pro_sequence_all WIN32 src/tobii_pro_sequence_all.cpp)
+
+target_include_directories(tobii_pro_sequence_all PRIVATE ${TOBII_PRO_SDK_INCLUDE})
+
+target_link_libraries(tobii_pro_sequence_all "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.lib" gdi32 user32)
+
+add_custom_command(TARGET tobii_pro_sequence_all POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TOBII_PRO_SDK_LIB}/${ARCH}/tobii_research.dll" $<TARGET_FILE_DIR:tobii_pro_sequence_all>)
+
+install(TARGETS tobii_pro_sequence_set1 tobii_pro_sequence_set2 tobii_pro_sequence_set3 tobii_pro_sequence_set4 tobii_pro_sequence_all RUNTIME DESTINATION bin) 
